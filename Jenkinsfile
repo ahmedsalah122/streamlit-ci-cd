@@ -9,22 +9,27 @@ pipeline {
             }
         }
 
-        stage('Install Streamlit') {
+        stage('Check Environment') {
             steps {
-                sh 'python -m pip install streamlit'
+                sh 'echo "Checking Jenkins environment..."'
+                sh 'python3 --version || echo "Python not installed in Jenkins"'
+                sh 'pip --version || echo "pip not available"'
             }
         }
 
-        stage('Run App') {
+        stage('List Project Files') {
             steps {
-                sh 'python -m streamlit run streamlit_app.py --server.port 8501 &'
+                sh 'ls -la'
             }
         }
     }
 
     post {
         success {
-            echo "SUCCESS 🚀 Streamlit is running"
+            echo "CI SUCCESS 🚀 Jenkins is working"
+        }
+        failure {
+            echo "CI FAILED ❌"
         }
     }
 }
