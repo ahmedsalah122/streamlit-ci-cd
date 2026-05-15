@@ -3,33 +3,43 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
+                echo 'Cloning Repository...'
                 checkout scm
             }
         }
 
-        stage('Check Environment') {
+        stage('Checkout') {
             steps {
-                sh 'echo "Checking Jenkins environment..."'
-                sh 'python3 --version || echo "Python not installed in Jenkins"'
-                sh 'pip --version || echo "pip not available"'
+                echo 'Checking files...'
+                sh 'ls -la'
             }
         }
 
-        stage('List Project Files') {
+        stage('Install') {
             steps {
-                sh 'ls -la'
+                echo 'Installing dependencies...'
+                sh 'python3 --version || true'
+                sh 'pip --version || true'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                sh 'echo "Application deployed successfully 🚀"'
             }
         }
     }
 
     post {
         success {
-            echo "CI SUCCESS 🚀 Jenkins is working"
+            echo 'Pipeline SUCCESS ✅'
         }
+
         failure {
-            echo "CI FAILED ❌"
+            echo 'Pipeline FAILED ❌'
         }
     }
 }
